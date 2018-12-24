@@ -1,0 +1,148 @@
+\chapter{Moving Data}
+
+
+
+\section{Defining Data Elements}
+
+
+\subsection{Stack, Heap, .bss, .data, .text}
+\begin{itemize}
+    \item Stack is used to store local variables, such as parameters in a function or variables created in{}. It is allocated by system in C.
+    \item Heap is allocated mostly by memory allocate functions. This memory is managed by programmer.
+    \item .data is used to store initialized static data. It has a exact memory rom. These data are stored both in object files and execuation files.
+    \item .bss is used to store uninitialized static data. In object files, it is only a symbol to show needing memory space. In memory image, it is allocated with required memory space.
+    \item .text is used to store unchangable data like source code.
+\end{itemize}
+\subsection{.data}
+\begin{itemize}
+    \item Any data elements declared in this section are reserved in memory and can be read or written to by instructions in the assembly language program.
+    \item After the directive is declared, a default value (or values) must be defined.
+    \item The lowest memory value contains the first data element.
+\end{itemize}
+
+\subsubsection{Code Example}
+\begin{lstlisting}
+.section .data                   #.rodata(read only)
+msg:
+    .ascii "This is a message"   #.asciz(string used 
+                                 #for C functions 
+                                 #like printf)
+value
+    .int 32, 43, 432             #define many data in
+                                 #one line is allowed
+.equ PI 3.1415926                #constant value
+\end{lstlisting}
+
+
+
+\mbox{}\\
+
+
+\colorbox[gray]{0.8}
+{
+	\parbox[t]{35em}
+	{
+		.section is a Pseudo-operation. It can be used to tell assembler how to organize data. It is not a instruction. There are some types like .text, .data predefined.
+	}
+}
+
+
+\subsection{.bss}
+\begin{tabular}[c]{l|l}
+    \hline
+        Directives & Discription\\
+    \hline
+        .comm & Declares a common memory area for data that is not initialized\\
+        .lcomm & Declares a local common memory area for data that is not initialized\\
+    \hline
+\end{tabular}
+\begin{lstlisting}
+.section .bss
+.comm buffer 1000
+\end{lstlisting}
+
+
+
+\section{Moving Data Elements}
+\begin{itemize}
+	\item Moving immediate data to registers and memory
+	\begin{lstlisting}
+movl $0, %eax	#Register
+movl $0, height	#Memory
+	\end{lstlisting}
+	\item Moving data between registers
+	\begin{lstlisting}
+movl %eax, %ebx
+movw %ax, %cx
+	\end{lstlisting}
+	\item Moving data between memory and registers
+	\begin{itemize}
+		\item Moving data values from memory to a register
+		\begin{lstlisting}
+value:
+	.int 1
+movl value, %eax	#$eax=1
+movl $value, %eax	#$eax=(address of value)
+		\end{lstlisting}
+		\item Moving data values from a register to memory
+		\begin{lstlisting}
+movl %eax, value
+		\end{lstlisting}
+		\item Using indexed memory locations
+		
+		base\_address(offset\_address, index, size)
+		\begin{lstlisting}
+.section .data
+output:
+.asciz "The value is %d\n"
+values:
+.int 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+.section .text
+.globl _start
+_start:
+nop
+movl $0, %edi
+movl $4, %ebx
+loop:
+	movl values(%ebx, %edi, 4), %eax
+	pushl %eax
+	pushl $output
+	call printf
+	addl $8, %esp
+	inc %edi
+	cmpl $11, %edi
+	jne loop
+	movl $0, %ebx
+	movl $1, %eax
+	int $0x80
+		\end{lstlisting}
+		\item Using indirect addressing with registers
+		
+		You can get the memory
+		location address of the data value by placing a dollar sign (\$) in front of the label in the instruction.
+		\begin{lstlisting}
+movl $value, %eax
+movl %ebx, -4(%eax)
+		\end{lstlisting}
+	\end{itemize}
+\end{itemize}
+\colorbox[gray]{0.8}
+{
+	\parbox{36em}
+	{
+		\emph{How to compile 32bits code in 64bits}
+		\begin{itemize}
+			\item as --32 -gstabs -o a.o source.s
+			\item ld -m elf\_i386 --oformat elf32-i386 -dynamic-linker /usr/lib32/ld-linux.so.2 -o a a.o /usr/lib32/libc.so
+		\end{itemize}
+	}
+}
+
+\section{Conditional Move Instructions}
+\begin{tabular}{c|c|c}
+	\hline
+	Data Type & eflags & Instructions\\
+	\hline
+	signed & SF OF ZF & ge/nl l/nge le/ng o no s ns\\
+	unsigned & CF ZF PF & a/be ae/nb nc b/ae c be/na e/z ne/nz p/pe np/po\\
+\end{tabular}

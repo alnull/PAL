@@ -1,0 +1,40 @@
+\chapter{What Is Assembly Language}
+\section{Why to use assembly language}
+\begin{itemize}
+    \item To simplify the instruction codes(historical reason)
+    \item To improve the effiency of usig high level language(present reason)
+\end{itemize}
+\section{Instruction code design format}
+\begin{itemize}
+    \item \emph{Software = Data + Code}
+        
+        So design two pointers: data pointer and instruction pointer
+        \begin{itemize} 
+            \item Instruction pointer infers what code is next in line to be processed
+            \item Data pointer infers the start address of stack
+        \end{itemize}
+    \item \emph{Instruction code format}
+        \begin{itemize}
+            \item Optional instruction prefix: modify the opcode behavior
+            \item Operation code: define function or task
+            \item Optional modifier: extra information to locate address
+            \item Optional data element
+        \end{itemize}
+\end{itemize}
+\section{The relationship between al and hll}
+Many languages can be compiled or interpreted to al source. Al source files then can be assembled to machine code.
+\section{Assembly Language}
+\begin{itemize}
+    \item use opcode mnemonic to facilitate writing
+    \item two ways to define data
+        \begin{itemize}
+            \item use memory locations
+            \item use the stack
+        \end{itemize}
+    \item directives: similiar to keywords in C/C++
+        \begin{itemize}
+            \item .bss: buffer
+            \item .text: code
+            \item .data: data
+        \end{itemize}
+\end{itemize}

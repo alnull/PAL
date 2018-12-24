@@ -1,0 +1,9 @@
+*.o
+a
+cpuid
+cpu
+hello
+*.aux
+*.pdf
+*.log
+*.synctex.gz

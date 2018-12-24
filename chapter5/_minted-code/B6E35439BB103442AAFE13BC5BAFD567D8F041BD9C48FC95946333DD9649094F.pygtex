@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+na}{.section} \PYG{n+no}{.data}
+\PYG{n+nl}{output:}
+    \PYG{n+na}{.ascii} \PYG{l+s}{\PYGZdq{}The Processor Vendor ID is \PYGZsq{}xxxxxxxxxxxx\PYGZsq{}\PYGZbs{}n\PYGZdq{}}
+\PYG{n+na}{.section} \PYG{n+no}{.text}
+\PYG{n+na}{.global} \PYG{n+no}{\PYGZus{}start}
+\PYG{n+nl}{\PYGZus{}start:}
+    \PYG{n+nf}{movl} \PYG{n+no}{\PYGZdl{}0}\PYG{p}{,} \PYG{n+nv}{\PYGZpc{}eax}
+    \PYG{n+nf}{cpuid}
+    \PYG{n+nf}{movl} \PYG{n+no}{\PYGZdl{}output}\PYG{p}{,} \PYG{n+nv}{\PYGZpc{}edi}
+    \PYG{n+nf}{movl} \PYG{n+nv}{\PYGZpc{}ebx}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{(}\PYG{n+nv}{\PYGZpc{}edi}\PYG{p}{)} \PYG{c}{\PYGZsh{}High 4 bytes}
+    \PYG{n+no}{movl} \PYG{n+nv}{\PYGZpc{}edx}\PYG{p}{,} \PYG{l+m+mi}{32}\PYG{p}{(}\PYG{n+nv}{\PYGZpc{}edi}\PYG{p}{)} \PYG{c}{\PYGZsh{}Middle 4 bytes}
+    \PYG{n+no}{movl} \PYG{n+nv}{\PYGZpc{}ecx}\PYG{p}{,} \PYG{l+m+mi}{36}\PYG{p}{(}\PYG{n+nv}{\PYGZpc{}edi}\PYG{p}{)} \PYG{c}{\PYGZsh{}Low 4 bytes}
+    \PYG{n+no}{movl} \PYG{n+no}{\PYGZdl{}4}\PYG{p}{,} \PYG{n+nv}{\PYGZpc{}eax} \PYG{c}{\PYGZsh{}write}
+    \PYG{n+no}{movl} \PYG{n+no}{\PYGZdl{}1}\PYG{p}{,} \PYG{n+nv}{\PYGZpc{}ebx} \PYG{c}{\PYGZsh{}write to fp=1(console)}
+    \PYG{n+no}{movl} \PYG{n+no}{\PYGZdl{}output}\PYG{p}{,} \PYG{n+nv}{\PYGZpc{}ecx} \PYG{c}{\PYGZsh{}start point}
+    \PYG{n+no}{movl} \PYG{n+no}{\PYGZdl{}42}\PYG{p}{,} \PYG{n+nv}{\PYGZpc{}edx} \PYG{c}{\PYGZsh{}string length}
+    \PYG{n+no}{int} \PYG{n+no}{\PYGZdl{}0x80} \PYG{c}{\PYGZsh{}Linux system call 4(in result of eax=4)}
+    \PYG{n+no}{movl} \PYG{n+no}{\PYGZdl{}1}\PYG{p}{,} \PYG{n+nv}{\PYGZpc{}eax} \PYG{c}{\PYGZsh{}call 1}
+    \PYG{n+no}{movl} \PYG{n+no}{\PYGZdl{}0}\PYG{p}{,} \PYG{n+nv}{\PYGZpc{}ebx} \PYG{c}{\PYGZsh{}return value}
+    \PYG{n+no}{int} \PYG{n+no}{\PYGZdl{}0x80}
+\end{Verbatim}
